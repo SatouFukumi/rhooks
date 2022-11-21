@@ -1,7 +1,7 @@
 {
   "name": "@fukumi/rhooks",
   "private": false,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Useful React custom hooks.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -14,12 +14,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jaywcjlove/tsbb/tree/master/example/basic"
+    "url": "https://github.com/SatouFukumi/rhooks"
   },
   "files": [
     "lib"
   ],
-  "keywords": [],
+  "keywords": [
+    "react",
+    "hooks",
+    "custom hooks",
+    "typescript"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@types/react": "^18.0.25",
@@ -27,6 +32,7 @@
   },
   "dependencies": {
     "@fukumi/libraries": "^1.0.9",
+    "react": "^18.2.0",
     "superjson": "^1.11.0"
   }
 }
