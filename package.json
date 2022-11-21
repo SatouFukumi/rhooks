@@ -1,14 +1,14 @@
 {
   "name": "@fukumi/rhooks",
   "private": false,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Useful React custom hooks.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "start": "node lib/index.js",
-    "watch": "tsbb watch --disable-babel --file-names src/index.ts",
-    "build": "tsbb build --disable-babel --file-names src/index.ts",
+    "watch": "tsbb watch --disable-babel --file-names src/index.ts --emit-type",
+    "build": "tsbb build --disable-babel --file-names src/index.ts --emit-type",
     "test": "yarn build && tsbb test",
     "coverage": "yarn build && tsbb test --coverage --bail"
   },
