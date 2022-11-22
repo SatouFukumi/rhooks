@@ -1,3 +1,4 @@
+import type { MilliSec } from "./types"
 import { useState } from "react"
 import { useSynchronizedInterval } from "./use-interval"
 

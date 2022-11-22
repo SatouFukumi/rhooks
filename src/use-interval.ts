@@ -1,3 +1,4 @@
+import type { MilliSec } from "./types"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 export function useInterval(callback: () => any, ms: MilliSec) {

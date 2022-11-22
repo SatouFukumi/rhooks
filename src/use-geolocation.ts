@@ -1,10 +1,11 @@
+import type RHook from "./types"
 import { methods as _ } from "@fukumi/libraries"
 import { useCallback, useEffect, useRef, useState } from "react"
 
 export function useGeolocation({
   options = {},
   throttle = 1000,
-}: F.RHook.UseGeolocationParam = {}): F.RHook.UseGeolocationReturn {
+}: RHook.UseGeolocationParam = {}): RHook.UseGeolocationReturn {
   const [geoPosition, setGeoPosition] = useState<GeolocationPosition>()
   const [error, setError] = useState<GeolocationPositionError>()
 

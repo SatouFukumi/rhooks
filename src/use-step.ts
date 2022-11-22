@@ -1,6 +1,7 @@
+import type RHook from "./types"
 import { useState } from "react"
 
-export function useStep(maxStep: number): [number, F.RHook.UseStepReturnFunc] {
+export function useStep(maxStep: number): [number, RHook.UseStepReturnFunc] {
   const [currentStep, setCurrentStep] = useState(1)
   const nextStepIsAvailable: boolean = currentStep + 1 <= maxStep
   const prevStepIsAvailable: boolean = currentStep - 1 >= 1

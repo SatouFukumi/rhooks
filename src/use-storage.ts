@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
 import { useEventListener } from "./use-event-listener"
 import SuperJSON from "superjson"
+import type RHook from "./types"
 
 export function useLocalStorage<T extends unknown>(
   key: string,
   initialValue: T
-): F.RHook.UseStorageReturn<T> {
+): RHook.UseStorageReturn<T> {
   // Get from local storage then
   // parse stored json or return initialValue
   const getValue = useCallback((): T => {
@@ -95,7 +96,7 @@ export function useLocalStorage<T extends unknown>(
 export function useSessionStorage<T extends unknown>(
   key: string,
   initialValue: T
-): F.RHook.UseStorageReturn<T> {
+): RHook.UseStorageReturn<T> {
   // Get from local storage then
   // parse stored json or return initialValue
   const getValue = useCallback((): T => {

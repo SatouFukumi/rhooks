@@ -1,9 +1,11 @@
 import { useEffect, useRef } from "react"
+import type RHook from "./types"
+import type { MilliSec } from "./types"
 
 export function useTimeout(
   callback: () => any,
   ms: MilliSec
-): F.RHook.UseTimeoutReturn {
+): RHook.UseTimeoutReturn {
   const timeoutIdRef = useRef<NodeJS.Timeout>()
 
   useEffect(() => {

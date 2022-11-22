@@ -1,3 +1,4 @@
+import type RHook from "./types"
 import { useEffect, useState } from "react"
 import { methods as _ } from "@fukumi/libraries"
 
@@ -5,7 +6,7 @@ export function useIntersectionObserver<T extends HTMLElement = HTMLElement>({
   ref,
   options,
   onIntersect,
-}: F.RHook.UseIntersectionObserverParam<T>) {
+}: RHook.UseIntersectionObserverParam<T>) {
   const [entry, setEntry] = useState<IntersectionObserverEntry>()
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export function useIntersectionObserver<T extends HTMLElement = HTMLElement>({
 
 export function useIntersectionObserverCallback<
   T extends HTMLElement = HTMLElement
->({ ref, options, onIntersect }: F.RHook.UseIntersectionObserverParam<T>) {
+>({ ref, options, onIntersect }: RHook.UseIntersectionObserverParam<T>) {
   useEffect(() => {
     if (!ref.current) return
 
@@ -45,7 +46,7 @@ export function useMutationObserver<T extends HTMLElement = HTMLElement>({
   ref,
   onMutate,
   options = {},
-}: F.RHook.UseMutationObserverParam<T>) {
+}: RHook.UseMutationObserverParam<T>) {
   const [record, setRecord] = useState<MutationRecord>()
 
   useEffect(() => {
@@ -67,7 +68,7 @@ export function useMutationObserverCallback<T extends HTMLElement = HTMLElement>
   ref,
   onMutate,
   options = {},
-}: F.RHook.UseMutationObserverParam<T>) {
+}: RHook.UseMutationObserverParam<T>) {
   useEffect(() => {
     if (!ref.current) return
 
@@ -83,7 +84,7 @@ export function useResizeObserver<T extends HTMLElement = HTMLElement>({
   onResize,
   throttle = 0,
   options = {},
-}: F.RHook.UseResizeObserverParam<T>) {
+}: RHook.UseResizeObserverParam<T>) {
   type Pixel = 1
   type Pixels = number
   type Px = Pixel | Pixels
@@ -119,7 +120,7 @@ export function useResizeObserverCallback<T extends HTMLElement = HTMLElement>({
   onResize,
   throttle = 0,
   options = {},
-}: F.RHook.UseResizeObserverParam<T>) {
+}: RHook.UseResizeObserverParam<T>) {
   useEffect(() => {
     if (!ref.current) return
 
