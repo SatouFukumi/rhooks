@@ -17,7 +17,9 @@
     "url": "https://github.com/SatouFukumi/rhooks"
   },
   "files": [
-    "lib"
+    "lib",
+    "readme.md",
+    ".eslintrc.json"
   ],
   "keywords": [
     "react",
