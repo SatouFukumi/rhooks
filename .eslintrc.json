@@ -1,0 +1,25 @@
+{
+  "extends": [
+    "next/core-web-vitals"
+  ],
+  "rules": {
+    "camelcase": "error",
+    "arrow-spacing": "error",
+    "operator-linebreak": [
+      "error",
+      "before"
+    ],
+    "max-statements-per-line": [
+      "error",
+      {
+        "max": 2
+      }
+    ],
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      {
+        "additionalHooks": "(useRenderEffect|useAsyncEffect)"
+      }
+    ]
+  }
+}
