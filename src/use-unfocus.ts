@@ -1,10 +1,10 @@
 import { useRef } from "react"
 import { useEventListener } from "./use-event-listener"
 
-export function useUnfocus<T extends HTMLElement = HTMLElement>(
+export const useUnfocus = <T extends HTMLElement = HTMLElement>(
   ref: React.RefObject<T>,
   cb: (e: MouseEvent) => any
-) {
+) => {
   useEventListener(
     "click",
     (e) => {

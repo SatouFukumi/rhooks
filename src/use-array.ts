@@ -1,12 +1,12 @@
 import { useState } from "react"
 
-export function useArray<T extends unknown>(initialArray: T[]) {
+export const useArray = <T extends unknown>(initialArray: T[]) => {
   const [array, setArray] = useState(initialArray)
 
   return {
     array,
 
-    set(value: React.SetStateAction<typeof initialArray>) {
+    set(value: React.SetStateAction<T[]>) {
       setArray(value)
     },
 

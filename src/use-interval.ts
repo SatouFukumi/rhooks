@@ -1,7 +1,7 @@
 import type { MilliSec } from "./types"
 import { useCallback, useEffect, useRef, useState } from "react"
 
-export function useInterval(callback: () => any, ms: MilliSec) {
+export const useInterval = (callback: () => any, ms: MilliSec) => {
   const intervalIdRef = useRef<NodeJS.Timer>()
   const [play, setPlay] = useState(true)
 
@@ -34,7 +34,7 @@ interface IntervalBucket {
 
 const intervalBucketRcd: Record<MilliSec, IntervalBucket> = {}
 
-function getIntervalBucket(ms: MilliSec): IntervalBucket {
+const getIntervalBucket = (ms: MilliSec): IntervalBucket => {
   let bucket = intervalBucketRcd[ms]
 
   if (!bucket) {
@@ -51,13 +51,13 @@ function getIntervalBucket(ms: MilliSec): IntervalBucket {
   return bucket
 }
 
-function addToIntervalBucket(ms: MilliSec, callback: () => any) {
+const addToIntervalBucket = (ms: MilliSec, callback: () => any) => {
   const bucket = getIntervalBucket(ms)
 
   bucket.callbacks.push(callback)
 }
 
-function removeFromIntervalBucket(ms: MilliSec, callback: () => any) {
+const removeFromIntervalBucket = (ms: MilliSec, callback: () => any) => {
   const bucket = getIntervalBucket(ms)
 
   bucket.callbacks = bucket.callbacks.filter((c) => c !== callback)
@@ -68,7 +68,7 @@ function removeFromIntervalBucket(ms: MilliSec, callback: () => any) {
   }
 }
 
-export function useSynchronizedInterval(callback: () => any, ms: MilliSec) {
+export const useSynchronizedInterval = (callback: () => any, ms: MilliSec) => {
   const [play, setPlay] = useState(true)
 
   const cb = useCallback(() => {

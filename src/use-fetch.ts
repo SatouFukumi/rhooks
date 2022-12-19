@@ -1,21 +1,21 @@
-import type RHook from "./types"
 import { useEffect, useReducer, useRef } from "react"
+import type { UseFetchReturn } from "./types"
 
-export function useFetch<T = unknown>(
+export const useFetch = <T = unknown>(
   url?: string,
   options?: RequestInit
-): RHook.UseFetchReturn<T> {
+): UseFetchReturn<T> => {
   const cache = useRef<{ [url: string]: T }>({})
   const cancelRequest = useRef<boolean>(false)
 
   const [state, dispatch] = useReducer(
     (
-      state: RHook.UseFetchReturn<T>,
+      state: UseFetchReturn<T>,
       action:
         | { type: "loading" }
         | { type: "fetched"; payload: T }
         | { type: "error"; payload: Error }
-    ): RHook.UseFetchReturn<T> => {
+    ): UseFetchReturn<T> => {
       switch (action.type) {
         case "loading":
           return { isLoading: true, data: undefined, error: undefined }

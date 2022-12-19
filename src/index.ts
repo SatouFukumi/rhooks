@@ -1,4 +1,4 @@
-export type { default as RHook } from "./types"
+export * from "./types"
 export * from "./use-array"
 export * from "./use-async"
 export * from "./use-clock"

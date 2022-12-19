@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react"
 import { useEventListener } from "./use-event-listener"
 import SuperJSON from "superjson"
-import type RHook from "./types"
+import type { UseStorageReturn } from "./types"
 
-export function useLocalStorage<T extends unknown>(
+export const useLocalStorage = <T extends unknown>(
   key: string,
   initialValue: T
-): RHook.UseStorageReturn<T> {
+): UseStorageReturn<T> => {
   // Get from local storage then
   // parse stored json or return initialValue
   const getValue = useCallback((): T => {
@@ -17,11 +17,11 @@ export function useLocalStorage<T extends unknown>(
       const item = localStorage.getItem(key)
 
       if (item === null) {
-        localStorage.setItem(key, SuperJSON.stringify(initialValue))
+        localStorage.setItem(key, SuperJSON.stringify(SuperJSON.serialize(initialValue)))
         return initialValue
       }
 
-      return SuperJSON.parse(item) as T
+      return SuperJSON.deserialize(SuperJSON.parse(item)) as T
     } catch (error) {
       console.warn(`Error reading localStorage key “${key}”:`, error)
 
@@ -49,7 +49,7 @@ export function useLocalStorage<T extends unknown>(
         const newValue = sta instanceof Function ? sta(storedValue) : sta
 
         // Save to local storage
-        localStorage.setItem(key, SuperJSON.stringify(newValue))
+        localStorage.setItem(key, SuperJSON.stringify(SuperJSON.serialize(newValue)))
 
         // Save state
         setStoredValue(newValue)
@@ -93,10 +93,10 @@ export function useLocalStorage<T extends unknown>(
   }
 }
 
-export function useSessionStorage<T extends unknown>(
+export const useSessionStorage = <T extends unknown>(
   key: string,
   initialValue: T
-): RHook.UseStorageReturn<T> {
+): UseStorageReturn<T> => {
   // Get from local storage then
   // parse stored json or return initialValue
   const getValue = useCallback((): T => {
@@ -107,11 +107,11 @@ export function useSessionStorage<T extends unknown>(
       const item = sessionStorage.getItem(key)
 
       if (item === null) {
-        sessionStorage.setItem(key, SuperJSON.stringify(initialValue))
+        sessionStorage.setItem(key, SuperJSON.stringify(SuperJSON.serialize(initialValue)))
         return initialValue
       }
 
-      return SuperJSON.parse(item) as T
+      return SuperJSON.deserialize(SuperJSON.parse(item)) as T
     } catch (error) {
       console.warn(`Error reading sessionStorage key “${key}”:`, error)
 
@@ -139,7 +139,7 @@ export function useSessionStorage<T extends unknown>(
         const newValue = sta instanceof Function ? sta(storedValue) : sta
 
         // Save to local storage
-        sessionStorage.setItem(key, SuperJSON.stringify(newValue))
+        sessionStorage.setItem(key, SuperJSON.stringify(SuperJSON.serialize(newValue)))
 
         // Save state
         setStoredValue(newValue)

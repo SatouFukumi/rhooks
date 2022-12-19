@@ -1,12 +1,16 @@
-import type RHook from "./types"
+import type {
+  UseIntersectionObserverParam,
+  UseMutationObserverParam,
+  UseResizeObserverParam,
+} from "./types"
 import { useEffect, useState } from "react"
-import { methods as _ } from "@fukumi/libraries"
+import { throttled } from "@fukumi/libraries"
 
-export function useIntersectionObserver<T extends HTMLElement = HTMLElement>({
+export const useIntersectionObserver = <T extends HTMLElement = HTMLElement>({
   ref,
   options,
   onIntersect,
-}: RHook.UseIntersectionObserverParam<T>) {
+}: UseIntersectionObserverParam<T>) => {
   const [entry, setEntry] = useState<IntersectionObserverEntry>()
 
   useEffect(() => {
@@ -25,9 +29,13 @@ export function useIntersectionObserver<T extends HTMLElement = HTMLElement>({
   return entry!
 }
 
-export function useIntersectionObserverCallback<
+export const useIntersectionObserverCallback = <
   T extends HTMLElement = HTMLElement
->({ ref, options, onIntersect }: RHook.UseIntersectionObserverParam<T>) {
+>({
+  ref,
+  options,
+  onIntersect,
+}: UseIntersectionObserverParam<T>) => {
   useEffect(() => {
     if (!ref.current) return
 
@@ -42,11 +50,11 @@ export function useIntersectionObserverCallback<
   }, [ref, options, onIntersect])
 }
 
-export function useMutationObserver<T extends HTMLElement = HTMLElement>({
+export const useMutationObserver = <T extends HTMLElement = HTMLElement>({
   ref,
   onMutate,
   options = {},
-}: RHook.UseMutationObserverParam<T>) {
+}: UseMutationObserverParam<T>) => {
   const [record, setRecord] = useState<MutationRecord>()
 
   useEffect(() => {
@@ -64,11 +72,11 @@ export function useMutationObserver<T extends HTMLElement = HTMLElement>({
   return record!
 }
 
-export function useMutationObserverCallback<T extends HTMLElement = HTMLElement>({
+export const useMutationObserverCallback = <T extends HTMLElement = HTMLElement>({
   ref,
   onMutate,
   options = {},
-}: RHook.UseMutationObserverParam<T>) {
+}: UseMutationObserverParam<T>) => {
   useEffect(() => {
     if (!ref.current) return
 
@@ -79,12 +87,12 @@ export function useMutationObserverCallback<T extends HTMLElement = HTMLElement>
   }, [ref, onMutate, options])
 }
 
-export function useResizeObserver<T extends HTMLElement = HTMLElement>({
+export const useResizeObserver = <T extends HTMLElement = HTMLElement>({
   ref,
   onResize,
   throttle = 0,
   options = {},
-}: RHook.UseResizeObserverParam<T>) {
+}: UseResizeObserverParam<T>) => {
   type Pixel = 1
   type Pixels = number
   type Px = Pixel | Pixels
@@ -98,7 +106,7 @@ export function useResizeObserver<T extends HTMLElement = HTMLElement>({
     if (!ref.current) return
 
     const obs = new ResizeObserver(
-      _.throttled(([entry]: ResizeObserverEntry[]) => {
+      throttled(([entry]: ResizeObserverEntry[]) => {
         setSize({
           width: entry.borderBoxSize[0].inlineSize,
           height: entry.borderBoxSize[0].blockSize,
@@ -115,17 +123,17 @@ export function useResizeObserver<T extends HTMLElement = HTMLElement>({
   return size
 }
 
-export function useResizeObserverCallback<T extends HTMLElement = HTMLElement>({
+export const useResizeObserverCallback = <T extends HTMLElement = HTMLElement>({
   ref,
   onResize,
   throttle = 0,
   options = {},
-}: RHook.UseResizeObserverParam<T>) {
+}: UseResizeObserverParam<T>) => {
   useEffect(() => {
     if (!ref.current) return
 
     const obs = new ResizeObserver(
-      _.throttled(([entry]: ResizeObserverEntry[]) => onResize?.(entry), throttle)
+      throttled(([entry]: ResizeObserverEntry[]) => onResize?.(entry), throttle)
     )
     obs.observe(ref.current, options)
 

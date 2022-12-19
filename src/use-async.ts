@@ -1,10 +1,10 @@
-import type RHook from "./types"
 import { useCallback, useEffect, useState } from "react"
+import type { UseAsyncEffectReturn } from "./types"
 
-export function useAsyncEffect<T extends any>(
+export const useAsyncEffect = <T extends any>(
   callback: () => Promise<T>,
   deps: React.DependencyList = []
-): RHook.UseAsyncEffectReturn<T> {
+): UseAsyncEffectReturn<T> => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState()
   const [data, setData] = useState<T>()
@@ -24,5 +24,5 @@ export function useAsyncEffect<T extends any>(
     callbackMemoized()
   }, [callbackMemoized])
 
-  return { isLoading, error, data } as RHook.UseAsyncEffectReturn<T>
+  return { isLoading, error, data } as UseAsyncEffectReturn<T>
 }

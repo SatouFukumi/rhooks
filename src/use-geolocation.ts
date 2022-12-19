@@ -1,11 +1,11 @@
-import type RHook from "./types"
-import { methods as _ } from "@fukumi/libraries"
+import { throttle as t } from "@fukumi/libraries"
 import { useCallback, useEffect, useRef, useState } from "react"
+import type { UseGeolocationParam, UseGeolocationReturn } from "./types"
 
-export function useGeolocation({
+export const useGeolocation = ({
   options = {},
   throttle = 1000,
-}: RHook.UseGeolocationParam = {}): RHook.UseGeolocationReturn {
+}: UseGeolocationParam = {}): UseGeolocationReturn => {
   const [geoPosition, setGeoPosition] = useState<GeolocationPosition>()
   const [error, setError] = useState<GeolocationPositionError>()
 
@@ -14,7 +14,7 @@ export function useGeolocation({
   const watchingRef = useRef<boolean>(false)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const positionSetter = useCallback(_.throttle(setGeoPosition, throttle), [])
+  const positionSetter = useCallback(t(setGeoPosition, throttle), [])
 
   useEffect(() => {
     if (stopRef.current) return

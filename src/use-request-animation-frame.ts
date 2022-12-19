@@ -41,7 +41,7 @@ class RecordAnimationFrame {
   }
 }
 
-export function useRequestAnimationFrame(callback: () => void) {
+export const useRequestAnimationFrame = (callback: () => void) => {
   return useMemo(() => {
     const record = new RecordAnimationFrame(callback)
 
