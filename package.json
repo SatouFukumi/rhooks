@@ -1,7 +1,7 @@
 {
   "name": "@fukumi/rhooks",
   "private": false,
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Useful React custom hooks.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -29,12 +29,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/react": "^18.0.25",
-    "tsbb": "^3.7.8"
+    "@types/react": "^18.0.26",
+    "tsbb": "^3.7.9"
   },
   "dependencies": {
-    "@fukumi/libraries": "^1.0.9",
+    "@fukumi/libraries": "^1.0.14",
     "react": "^18.2.0",
-    "superjson": "^1.11.0"
+    "superjson": "^1.12.0"
   }
 }
