@@ -1,4 +1,5 @@
 import type {
+  Px,
   UseIntersectionObserverParam,
   UseMutationObserverParam,
   UseResizeObserverParam,
@@ -93,10 +94,6 @@ export const useResizeObserver = <T extends HTMLElement = HTMLElement>({
   throttle = 0,
   options = {},
 }: UseResizeObserverParam<T>) => {
-  type Pixel = 1
-  type Pixels = number
-  type Px = Pixel | Pixels
-
   const [size, setSize] = useState<{ width: Px; height: Px }>({
     width: 0,
     height: 0,

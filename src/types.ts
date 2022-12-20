@@ -1,4 +1,5 @@
 export type MilliSec = number
+export type Px = number
 
 //
 // useAsyncEffect

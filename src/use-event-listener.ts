@@ -1,7 +1,7 @@
 import { RefObject, useEffect, useRef } from "react"
 
 type UseEventListener = {
-  // MediaQueryList Event based useEventListener interface
+  // MediaQueryList Event based useEventListener
   <K extends keyof MediaQueryListEventMap>(
     eventName: K,
     handler: (event: MediaQueryListEventMap[K]) => void,
@@ -9,7 +9,7 @@ type UseEventListener = {
     options?: boolean | AddEventListenerOptions
   ): void
 
-  // Window Event based useEventListener interface
+  // Window Event based useEventListener
   <K extends keyof WindowEventMap>(
     eventName: K,
     handler: (event: WindowEventMap[K]) => void,
@@ -17,7 +17,7 @@ type UseEventListener = {
     options?: boolean | AddEventListenerOptions
   ): void
 
-  // Element Event based useEventListener interface
+  // Element Event based useEventListener
   <K extends keyof HTMLElementEventMap, T extends HTMLElement = HTMLDivElement>(
     eventName: K,
     handler: (event: HTMLElementEventMap[K]) => void,
@@ -25,7 +25,7 @@ type UseEventListener = {
     options?: boolean | AddEventListenerOptions
   ): void
 
-  // Document Event based useEventListener interface
+  // Document Event based useEventListener
   <K extends keyof DocumentEventMap>(
     eventName: K,
     handler: (event: DocumentEventMap[K]) => void,

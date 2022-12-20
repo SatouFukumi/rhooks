@@ -26,34 +26,30 @@ export const useInterval = (callback: () => any, ms: MilliSec) => {
   }
 }
 
-interface IntervalBucket {
-  ms: MilliSec
-  callbacks: (() => any)[]
-  interval: NodeJS.Timer
+class IntervalBucket {
+  public interval: NodeJS.Timer
+  public callbacks: (() => any)[] = []
+  constructor(public ms: MilliSec) {
+    this.interval = setTimeout(() => this.callbacks.forEach((f) => f()))
+  }
 }
 
-const intervalBucketRcd: Record<MilliSec, IntervalBucket> = {}
+const intervalBucketMap = new Map<MilliSec, IntervalBucket>()
+
+const createIntervalBucket = (ms: MilliSec): IntervalBucket => {
+  const bucket: IntervalBucket = new IntervalBucket(ms)
+  intervalBucketMap.set(ms, bucket)
+  return bucket
+}
 
 const getIntervalBucket = (ms: MilliSec): IntervalBucket => {
-  let bucket = intervalBucketRcd[ms]
-
-  if (!bucket) {
-    bucket = {
-      callbacks: [],
-      ms,
-      interval: setInterval(() => {
-        bucket.callbacks.forEach((f) => f())
-      }, ms),
-    }
-    intervalBucketRcd[ms] = bucket
-  }
-
+  const bucket = intervalBucketMap.get(ms)
+  if (!bucket) return createIntervalBucket(ms)
   return bucket
 }
 
 const addToIntervalBucket = (ms: MilliSec, callback: () => any) => {
   const bucket = getIntervalBucket(ms)
-
   bucket.callbacks.push(callback)
 }
 
@@ -64,23 +60,18 @@ const removeFromIntervalBucket = (ms: MilliSec, callback: () => any) => {
 
   if (bucket.callbacks.length === 0) {
     clearInterval(bucket.interval)
-    delete intervalBucketRcd[ms]
+    intervalBucketMap.delete(ms)
   }
 }
 
 export const useSynchronizedInterval = (callback: () => any, ms: MilliSec) => {
   const [play, setPlay] = useState(true)
 
-  const cb = useCallback(() => {
-    if (play) callback()
-  }, [callback, play])
+  const cb = useCallback(() => play && callback(), [callback, play])
 
   useEffect(() => {
     addToIntervalBucket(ms, cb)
-
-    return () => {
-      removeFromIntervalBucket(ms, cb)
-    }
+    return () => removeFromIntervalBucket(ms, cb)
   }, [cb, ms])
 
   return {
