@@ -1,27 +1,30 @@
 import type { MilliSec } from "./types"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef } from "react"
 
+/**
+ * 
+ * @param       callback        I strongly recommend using a passed in `useCallback`, since if you are 
+ * working with states in this callback, it'll block the render flow and u'll have to deal 
+ * with a lot of debug
+ * @param       ms 
+ */
 export const useInterval = (callback: () => any, ms: MilliSec) => {
   const intervalIdRef = useRef<NodeJS.Timer>()
-  const [play, setPlay] = useState(true)
+  const toPlayRef = useRef<boolean>(true)
+  const cb = useCallback(() => toPlayRef.current && callback(), [callback])
 
   useEffect(() => {
-    intervalIdRef.current = setInterval(() => {
-      if (play) callback()
-    }, ms)
-
+    intervalIdRef.current = setInterval(cb, ms)
     return () => clearInterval(intervalIdRef.current)
-  }, [callback, ms, play])
+  }, [cb, ms])
 
   return {
     start() {
-      if (play) return
-      setPlay(true)
+      toPlayRef.current = true
     },
 
     stop() {
-      if (!play) return
-      setPlay(false)
+      toPlayRef.current = false
     },
   }
 }
@@ -30,7 +33,7 @@ class IntervalBucket {
   public interval: NodeJS.Timer
   public callbacks: (() => any)[] = []
   constructor(public ms: MilliSec) {
-    this.interval = setTimeout(() => this.callbacks.forEach((f) => f()))
+    this.interval = setInterval(() => this.callbacks.forEach((f) => f()), this.ms)
   }
 }
 
@@ -43,17 +46,17 @@ const createIntervalBucket = (ms: MilliSec): IntervalBucket => {
 }
 
 const getIntervalBucket = (ms: MilliSec): IntervalBucket => {
-  const bucket = intervalBucketMap.get(ms)
-  if (!bucket) return createIntervalBucket(ms)
-  return bucket
+  return intervalBucketMap.has(ms)
+    ? intervalBucketMap.get(ms)!
+    : createIntervalBucket(ms)
 }
 
-const addToIntervalBucket = (ms: MilliSec, callback: () => any) => {
+const addCallbackToIntervalBucket = (ms: MilliSec, callback: () => any) => {
   const bucket = getIntervalBucket(ms)
   bucket.callbacks.push(callback)
 }
 
-const removeFromIntervalBucket = (ms: MilliSec, callback: () => any) => {
+const removeCallbackFromIntervalBucket = (ms: MilliSec, callback: () => any) => {
   const bucket = getIntervalBucket(ms)
 
   bucket.callbacks = bucket.callbacks.filter((c) => c !== callback)
@@ -64,22 +67,28 @@ const removeFromIntervalBucket = (ms: MilliSec, callback: () => any) => {
   }
 }
 
+/**
+ * 
+ * @param       callback        I strongly recommend using a passed in `useCallback`, since if you are 
+ * working with states in this callback, it'll block the render flow and u'll have to deal 
+ * with a lot of debug
+ * @param       ms 
+ */
 export const useSynchronizedInterval = (callback: () => any, ms: MilliSec) => {
-  const [play, setPlay] = useState(true)
-
-  const cb = useCallback(() => play && callback(), [callback, play])
-
+  const toPlayRef = useRef(true)
+  const cb = useCallback(() => toPlayRef.current && callback(), [callback])
+  
   useEffect(() => {
-    addToIntervalBucket(ms, cb)
-    return () => removeFromIntervalBucket(ms, cb)
+    addCallbackToIntervalBucket(ms, cb)
+    return () => removeCallbackFromIntervalBucket(ms, cb)
   }, [cb, ms])
 
   return {
     start() {
-      setPlay(true)
+      toPlayRef.current = true
     },
     stop() {
-      setPlay(false)
+      toPlayRef.current = false
     },
   }
 }

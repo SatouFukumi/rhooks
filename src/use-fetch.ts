@@ -1,12 +1,12 @@
-import { useEffect, useReducer, useRef } from "react"
+import { useCallback, useEffect, useReducer, useRef } from "react"
 import type { UseFetchReturn } from "./types"
 
 export const useFetch = <T = unknown>(
   url?: string,
   options?: RequestInit
 ): UseFetchReturn<T> => {
-  const cache = useRef<{ [url: string]: T }>({})
-  const cancelRequest = useRef<boolean>(false)
+  const cache = useRef<Map<string, T>>(new Map())
+  const toCancelRequest = useRef<boolean>(false)
 
   const [state, dispatch] = useReducer(
     (
@@ -45,48 +45,43 @@ export const useFetch = <T = unknown>(
     }
   )
 
-  useEffect(() => {
+  const fetchData = useCallback(async () => {
     // Do nothing if the url is not given
     if (!url) return
 
-    cancelRequest.current = false
+    toCancelRequest.current = false
 
-    const fetchData = async () => {
-      dispatch({ type: "loading" })
+    dispatch({ type: "loading" })
 
-      // If a cache exists for this url, return it
-      if (cache.current[url]) {
-        dispatch({ type: "fetched", payload: cache.current[url] })
+    // If a cache exists for this url, return it
+    if (cache.current.has(url))
+      return dispatch({ type: "fetched", payload: cache.current.get(url)! })
 
-        return
-      }
+    try {
+      const response = await fetch(url, options)
 
-      try {
-        const response = await fetch(url, options)
+      if (!response.ok) throw new Error(response.statusText)
 
-        if (!response.ok) {
-          throw new Error(response.statusText)
-        }
+      const data = (await response.json()) as T
+      cache.current.set(url, data)
 
-        const data = (await response.json()) as T
-        cache.current[url] = data
+      if (toCancelRequest.current) return
 
-        if (cancelRequest.current) return
+      dispatch({ type: "fetched", payload: data })
+    } catch (error) {
+      if (toCancelRequest.current) return
 
-        dispatch({ type: "fetched", payload: data })
-      } catch (error) {
-        if (cancelRequest.current) return
-
-        dispatch({ type: "error", payload: error as Error })
-      }
+      dispatch({ type: "error", payload: error as Error })
     }
+  }, [options, url])
 
+  useEffect(() => {
     fetchData()
 
     // Use the cleanup function for avoiding a possibly...
     // ...state update after the component was unmounted
     return () => {
-      cancelRequest.current = true
+      toCancelRequest.current = true
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

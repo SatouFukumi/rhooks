@@ -5,16 +5,16 @@ export const useCounter = (initialValue?: number) => {
 
   return {
     count,
-    increment() {
+    increase() {
       setCount((c) => c + 1)
     },
-    decrement() {
+    decrease() {
       setCount((c) => c - 1)
     },
     reset() {
       setCount(initialValue || 0)
     },
-    setCount(value: React.SetStateAction<number>) {
+    set(value: React.SetStateAction<number>) {
       setCount(value)
     },
   }

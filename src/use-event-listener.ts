@@ -5,7 +5,7 @@ type UseEventListener = {
   <K extends keyof MediaQueryListEventMap>(
     eventName: K,
     handler: (event: MediaQueryListEventMap[K]) => void,
-    element: RefObject<MediaQueryList>,
+    ref: RefObject<MediaQueryList>,
     options?: boolean | AddEventListenerOptions
   ): void
 
@@ -13,7 +13,7 @@ type UseEventListener = {
   <K extends keyof WindowEventMap>(
     eventName: K,
     handler: (event: WindowEventMap[K]) => void,
-    element?: undefined,
+    ref?: undefined,
     options?: boolean | AddEventListenerOptions
   ): void
 
@@ -21,7 +21,7 @@ type UseEventListener = {
   <K extends keyof HTMLElementEventMap, T extends HTMLElement = HTMLDivElement>(
     eventName: K,
     handler: (event: HTMLElementEventMap[K]) => void,
-    element: RefObject<T>,
+    ref: RefObject<T>,
     options?: boolean | AddEventListenerOptions
   ): void
 
@@ -29,7 +29,7 @@ type UseEventListener = {
   <K extends keyof DocumentEventMap>(
     eventName: K,
     handler: (event: DocumentEventMap[K]) => void,
-    element: RefObject<Document>,
+    ref: RefObject<Document>,
     options?: boolean | AddEventListenerOptions
   ): void
 }
@@ -54,7 +54,7 @@ export const useEventListener: UseEventListener = <
       | DocumentEventMap[TDocumentEventKey]
       | Event
   ) => void,
-  element?: RefObject<T>,
+  ref?: RefObject<T>,
   options?: boolean | AddEventListenerOptions
 ) => {
   // Create a ref that stores handler
@@ -66,7 +66,7 @@ export const useEventListener: UseEventListener = <
 
   useEffect(() => {
     // Define the listening target
-    const targetElement: T | Window = element?.current ?? window
+    const targetElement: T | Window = ref?.current ?? window
 
     if (!(targetElement && targetElement.addEventListener)) return
 
@@ -79,5 +79,5 @@ export const useEventListener: UseEventListener = <
     return () => {
       targetElement.removeEventListener(eventName, listener, options)
     }
-  }, [eventName, element, options])
+  }, [eventName, ref, options])
 }

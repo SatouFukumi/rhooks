@@ -101,8 +101,8 @@ export type UseStepReturnFunc = {
 //
 // useStorage
 export type UseStorageReturn<T> = {
-  value: T
-  setValue(value: React.SetStateAction<T>): void
+  value?: T
+  setValue(sta: React.SetStateAction<T | undefined>): void
   removeValue(): void
 }
 
@@ -111,6 +111,7 @@ export type UseStorageReturn<T> = {
 export type UseThemeReturn<T> = {
   theme: T
   setTheme(theme: React.SetStateAction<T>): void
+  setThemeRandomly(): void
 }
 
 //
