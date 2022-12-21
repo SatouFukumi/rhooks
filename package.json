@@ -1,7 +1,7 @@
 {
   "name": "@fukumi/rhooks",
   "private": false,
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Useful React custom hooks.",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -30,11 +30,15 @@
   "license": "MIT",
   "devDependencies": {
     "@types/react": "^18.0.26",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
+    "eslint": "8.30.0",
+    "eslint-config-next": "13.0.7",
     "tsbb": "^3.7.9"
   },
   "dependencies": {
-    "@fukumi/libraries": "^1.0.14",
+    "@fukumi/libraries": "^1.0.17",
     "react": "^18.2.0",
-    "superjson": "^1.12.0"
+    "superjson": "^1.12.1"
   }
 }
